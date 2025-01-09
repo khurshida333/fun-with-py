@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketchbook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #sketchpad {
+            border: 2px solid #000;
+            width: 800px;
+            height: 600px;
+            background-color: white;
+            cursor: crosshair;
+        }
+        #color-picker {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <canvas id="sketchpad"></canvas>
+    <input type="color" id="color-picker" value="#000000">
+</div>
+
+<script>
+    const canvas = document.getElementById('sketchpad');
+    const ctx = canvas.getContext('2d');
+    const colorPicker = document.getElementById('color-picker');
+
+    // Set canvas size
+    canvas.width = 800;
+    canvas.height = 600;
+
+    // Drawing state
+    let drawing = false;
+    let currentColor = '#000000'; // Default color
+
+    // Set color based on color picker
+    colorPicker.addEventListener('input', (e) => {
+        currentColor = e.target.value;
+    });
+
+    // Start drawing
+    canvas.addEventListener('mousedown', (e) => {
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    });
+
+    // Draw while mouse is moving
+    canvas.addEventListener('mousemove', (e) => {
+        if (drawing) {
+            ctx.strokeStyle = currentColor;
+            ctx.lineWidth = 5;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        }
+    });
+
+    // Stop drawing
+    canvas.addEventListener('mouseup', () => {
+        drawing = false;
+        ctx.closePath();
+    });
+
+    // Stop drawing when mouse leaves canvas
+    canvas.addEventListener('mouseleave', () => {
+        drawing = false;
+        ctx.closePath();
+    });
+</script>
+
+</body>
+</html>
